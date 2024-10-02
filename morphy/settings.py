@@ -1,5 +1,4 @@
-from enum import Enum
-# from petrovich.enums import Gender
+# Описание различных настроек и констант
 
 class Respected:
     MALE = "Уважаемый"
