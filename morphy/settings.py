@@ -1,8 +1,15 @@
 from enum import Enum
 # from petrovich.enums import Gender
 
-c_respected_male = "Уважаемый"
-c_respected_female = "Уважаемая"
+class Respected:
+    MALE = "Уважаемый"
+    FEMALE = "Уважаемая"
+
+class Gender:
+    """Перечисление полов"""
+    MALE = 0
+    FEMALE = 1
+    NEUTRAL = 2
 
 class RegimeInit:
     """Режимы начала имени"""
@@ -20,52 +27,55 @@ class RegimeLength:
 
 class Case:
     """Перечисление падежей"""
-    # Родительный
-    GENITIVE = 0
-    # Дательный
-    DATIVE = 1
-    # Винительный
-    ACCUSATIVE = 2
-    # Творительный
-    INSTRUMENTAL = 3
-    # Предложный
-    PREPOSITIONAL = 4
     # Именительный
-    NOMINATIVE = 5
+    NOMINATIVE = 1
+    # Родительный
+    GENITIVE = 2
+    # Дательный
+    DATIVE = 3
+    # Винительный
+    ACCUSATIVE = 4
+    # Творительный
+    INSTRUMENTAL = 5
+    # Предложный
+    PREPOSITIONAL = 6
 
-    CASES = (
-        DATIVE,
-        GENITIVE,
-        ACCUSATIVE,
-        INSTRUMENTAL,
-        PREPOSITIONAL,
-    )
+class YearAdd:
+   """Как дописывать год"""    
+   SHORT = 'add_short_year'  # Дописывать " г." в конце даты
+   LONG = 'add_long_year'   # Дописывать " года" в конце даты
 
-# sex_convert = {
-#     '1': Gender.MALE,
-#     '0': Gender.FEMALE
-# }    
+class DayFormat:
+   """Формат дня месяца"""
+   SHORT = 'short'  # Опускать ведущий 0
+   LONG = 'long'   # Выводить ведущий 0   
 
-case_convert = {
-   '1': Case.NOMINATIVE,
-   '2': Case.GENITIVE,
-   '3': Case.DATIVE,
-   '4': Case.ACCUSATIVE,
-   '5': Case.INSTRUMENTAL,
-   '6': Case.PREPOSITIONAL
-}
-
-pm_case = {
-   Case.NOMINATIVE: 'nomn',
-   Case.GENITIVE: 'gent',
-   Case.DATIVE: 'datv',
-   Case.ACCUSATIVE: 'accs',
-   Case.INSTRUMENTAL: 'ablt',
-   Case.PREPOSITIONAL: 'loct'
-}
+class PostFormat:
+   """Формат вывода должности"""  
+   AS_IS = 'post_as_is'  # Должность как есть
+   SHORT = 'post'        # Сокращенный вариант должности
+   DEPT = 'post_dept'    # Сокращенный вариант должности с кратким именем подразделения
+   LONG = 'post_long'    # Сокращенный вариант должности с полным именем подразделения
+   POSSIBLE = 'post_possible'  # Максимально возможную информацию на основе предоставленных данных
 
 length_convert = {
    RegimeLength.SHORT: (True, False),
    RegimeLength.REVERSE_SHORT: (True, True),
    RegimeLength.LONG: (False, False)
 }
+
+# Значения входных параметров по умолчанию
+DFLT_POST      = PostFormat.POSSIBLE   # Режим вывода должности по умолчанию
+DFLT_LENGTH    = RegimeLength.LONG     # Режим длины по умолчанию
+DFLT_DATE      = YearAdd.SHORT         # Режим даты по умолчанию
+DFLT_DAY       = DayFormat.SHORT       # Дописывать " года" в конце даты
+DFLT_CURR_CODE = 'RUR'                 # Код валюты по умолчанию
+DFLT_INIT_DEPT = RegimeInit.LOWER      # Режим вывода первой буквы подразделения по умолчанию
+
+# Режимы вывода количества
+class Count:
+    """Режимы вывода количества"""
+    DIGITAL = 'digital'  # Вывод количества числом
+    TEXT = 'text'        # Вывод количества текстом
+
+PTTRN_COUNT = '%s'                # Паттерн замены количества
