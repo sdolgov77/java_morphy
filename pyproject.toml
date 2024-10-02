@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "jtest"
+version = "0.1.0"
+description = ""
+authors = ["Sergio Dolgov <sdolgov77@yandex.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+jpype1 = "^1.5.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
