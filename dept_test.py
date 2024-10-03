@@ -1,7 +1,5 @@
-# from petrovich.main import Petrovich
-# from petrovich.enums import Gender
 import csv
-from morphy import Morphy, RegimeLength, Case, case_convert, length_convert
+from jmorphy import Morphy, RegimeLength, Case
 
 m = Morphy()
 counter = 0

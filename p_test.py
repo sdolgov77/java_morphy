@@ -1,7 +1,8 @@
 # from petrovich.enums import Case, Gender
 # from petrovich.main import Petrovich
 import os
-from morphy import Morphy, RegimeLength, Case, case_convert, length_convert
+import locale
+from jmorphy import Morphy, RegimeLength, Case, case_convert, length_convert
 
 # Текущая директория
 CURRENT_PATH = os.path.abspath(os.path.dirname(__file__))
