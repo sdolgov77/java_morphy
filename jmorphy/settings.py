@@ -8,8 +8,8 @@ class Respected:
 
 class Gender(int, Enum):
     """Перечисление полов"""
-    MALE = 0
-    FEMALE = 1
+    MALE = 1
+    FEMALE = 0
     NEUTRAL = 2
 
 class RegimeInit(str, Enum):

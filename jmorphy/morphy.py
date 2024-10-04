@@ -20,6 +20,7 @@ class Morphy:
 
     def __del__(self):
         shutdownJVM()
+        pass
 
     @staticmethod
     def check_phrase_case(phrase_case):

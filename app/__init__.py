@@ -3,10 +3,15 @@ from flask import Flask
 from .extensions import api
 from .resources import ns
 
-def create_app():
-    app = Flask(__name__)
+app = Flask(__name__)
 
-    api.init_app(app)
-    api.add_namespace(ns)
+api.init_app(app)
+api.add_namespace(ns)
+
+# def create_app(*args, **kwargs):
+#     app = Flask(__name__)
+
+#     api.init_app(app)
+#     api.add_namespace(ns)
     
-    return app
+#     return app
