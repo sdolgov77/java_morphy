@@ -1,7 +1,7 @@
 from flask_restx import Resource, Namespace
 
-from .api_models import fio_parser, full_fio_parser, dept_parser, post_parser, date_parser
-from .extensions import api, morphy
+from .api_models import fio_parser, full_fio_parser, dept_parser, post_parser, date_parser, phrase_parser
+from .extensions import api, morphy, del_none
 
 
 ns = Namespace('api', description='API')
@@ -46,3 +46,11 @@ class FioApi(Resource):
         args = date_parser.parse_args()
         
         return morphy.print_date(**args)      
+    
+@ns.route('/phrase')
+class FioApi(Resource):
+    @api.doc(parser=phrase_parser)
+    def get(self):
+        args = phrase_parser.parse_args()
+        _args = del_none(args)
+        return morphy.phrase(**_args)     

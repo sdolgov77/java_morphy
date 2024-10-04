@@ -3,7 +3,6 @@ import locale
 # import os
 import re
 from .settings import *
-# from .settings import DFLT_DATE, DFLT_DAY, DFLT_INIT_DEPT, DFLT_LENGTH, DFLT_POST, DayFormat, Gender, PostFormat, RegimeLength, Case,  RegimeInit, Respected, YearAdd, length_convert, EXCL_POST, EXCL_DEPT
 from jpype import startJVM, shutdownJVM,getDefaultJVMPath, JPackage, addClassPath
 
 # Текущая директория
@@ -26,7 +25,6 @@ class Morphy:
 
     def __del__(self):
         shutdownJVM()
-        pass
 
     @staticmethod
     def check_phrase_case(phrase_case):
@@ -333,7 +331,7 @@ class Morphy:
             return post_name
         
         if regime_post in (PostFormat.POSSIBLE, PostFormat.SHORT, PostFormat.DEPT, PostFormat.LONG):
-            if Morphy.cutted_post(post_name) and not l_no_dept:
+            if self.cutted_post(post_name) and not l_no_dept:
                 if l_dept_long == '' and regime_post != PostFormat.POSSIBLE:
                     raise Exception('Для сокращения наименования должности не хватает полного наименования подразделения!')
                 elif l_dept_long != '':

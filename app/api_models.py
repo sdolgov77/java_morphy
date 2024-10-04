@@ -27,7 +27,7 @@ full_fio_parser.add_argument("regime_length", type=str, required=False, choices=
 dept_parser = reqparse.RequestParser()
 dept_parser.add_argument("dept_name", type=str, required=False, help="Example - [Служба экологической безопасности]", location="args")
 dept_parser.add_argument("phrase_case", type=int, choices=case_choices, required=False, help="Example - [1]", location="args")
-dept_parser.add_argument("regime_init", type=str, required=False, choices=regime_init_choices, help="Example - ['init_as_is', 'init_upper']", location="args")
+dept_parser.add_argument("regime_init", type=str, required=False, choices=['init_as_is', 'init_lower'], help="Example - ['init_as_is', 'init_lower']", location="args")
 
 post_parser = reqparse.RequestParser()
 post_parser.add_argument("post_name", type=str, required=False, help="Example - [Ведущий специалист]", location="args")
@@ -36,7 +36,7 @@ post_parser.add_argument("dept_long_name", type=str, required=False, help="Examp
 post_parser.add_argument("dept_name", type=str, required=False, help="Example - [СЭБиРП]", location="args")
 post_parser.add_argument("phrase_case", type=int, choices=case_choices, required=False, help="Example - [1]", location="args")
 post_parser.add_argument("regime_post", type=str, required=False, choices=post_format_choices, help="Example - ['short', 'long']", location="args")
-post_parser.add_argument("regime_init_dept", type=str, required=False, choices=regime_init_choices, help="Example - ['init_as_is', 'init_upper']", 
+post_parser.add_argument("regime_init_dept", type=str, required=False, choices=['init_as_is', 'init_lower'], help="Example - ['init_as_is', 'init_lower']", 
                          location="args")
 
 date_parser = reqparse.RequestParser()
@@ -45,6 +45,6 @@ date_parser.add_argument('regime', type=str, required=True, choices=year_add_cho
 date_parser.add_argument('regime_day', type=str, required=True, choices=day_format_choices, help="Example - ['short', 'long']", location="args")
 
 phrase_parser = reqparse.RequestParser()
-phrase_parser.add_argument('phrase', type=str, required=True, help="Example - ['Иванов Иван Иванович']", location="args")
+phrase_parser.add_argument('phrase', type=str, required=True, help="Example - ['Просто какая-то фраза']", location="args")
 phrase_parser.add_argument('phrase_case', type=int, choices=case_choices, required=False, help="Example - [1]", location="args") 
 
