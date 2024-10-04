@@ -10,6 +10,12 @@ from jpype import startJVM, shutdownJVM,getDefaultJVMPath, JPackage, addClassPat
 # CURRENT_PATH = os.path.abspath(os.path.dirname(__file__))
 # Путь до файла с правилами округления
 # DEFAULT_RULES_PATH = os.path.join(CURRENT_PATH, 'rules.json')
+case_choices = [v.value for v in Case]
+regime_length_choices = [v.value for v in RegimeLength]
+regime_init_choices = [v.value for v in RegimeInit]
+post_format_choices = [v.value for v in PostFormat]
+year_add_choices = [v.value for v in YearAdd]
+day_format_choices = [v.value for v in DayFormat]
 
 class Morphy:
     def __init__(self):
@@ -27,7 +33,7 @@ class Morphy:
         '''Проверка правильности задания падежа'''
         if phrase_case == None:
             raise Exception('Не задан падеж!')
-        if phrase_case not in Case:
+        if phrase_case not in case_choices: #Case:
             raise Exception('Неверно задан падеж!')
 
     @staticmethod
@@ -35,7 +41,7 @@ class Morphy:
         '''Корректность режима вывода первой буквы'''
         if regime == None:
             raise Exception('Не задан режим вывода первой буквы!')
-        if regime not in RegimeInit:
+        if regime not in regime_init_choices: #RegimeInit:
             raise Exception('Неверно задан режим вывода первой буквы!')
 
     @staticmethod
@@ -51,7 +57,7 @@ class Morphy:
         '''Корректность режима длины имени'''
         if regime == None:
             raise Exception('Не задан режим вывода имени!')
-        if regime not in RegimeLength:
+        if regime not in regime_length_choices: #RegimeLength:
             raise Exception('Неверно задан режим вывода имени!')
 
     @staticmethod
@@ -59,7 +65,7 @@ class Morphy:
         '''Корректность режима вывода должности'''
         if regime == None:
             raise Exception('Не задан режим вывода должности!')
-        if regime not in PostFormat:
+        if regime not in post_format_choices: #PostFormat:
             raise Exception('Неверно задан режим вывода должности!')
 
     @staticmethod
