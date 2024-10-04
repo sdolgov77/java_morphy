@@ -12,7 +12,7 @@ class Gender(int, Enum):
     FEMALE = 1
     NEUTRAL = 2
 
-class RegimeInit(Enum):
+class RegimeInit(str, Enum):
     """Режимы начала имени"""
     AS_IS = 'init_as_is'              # Выводить как есть
     LOWER = 'init_lower'              # Приводить первую букву к нижнему регистру
@@ -41,17 +41,17 @@ class Case(int, Enum):
     # Предложный
     PREPOSITIONAL = 6
 
-class YearAdd:
+class YearAdd(str, Enum):
    """Как дописывать год"""    
    SHORT = 'add_short_year'  # Дописывать " г." в конце даты
    LONG = 'add_long_year'   # Дописывать " года" в конце даты
 
-class DayFormat:
+class DayFormat(str, Enum):
    """Формат дня месяца"""
    SHORT = 'short'  # Опускать ведущий 0
    LONG = 'long'   # Выводить ведущий 0   
 
-class PostFormat(Enum):
+class PostFormat(str, Enum):
    """Формат вывода должности"""  
    AS_IS = 'post_as_is'  # Должность как есть
    SHORT = 'post'        # Сокращенный вариант должности

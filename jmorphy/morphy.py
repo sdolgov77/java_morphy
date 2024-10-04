@@ -1,3 +1,4 @@
+import datetime
 import locale
 # import os
 import re
@@ -83,14 +84,14 @@ class Morphy:
     @staticmethod
     def check_sex (sex):
         '''Проверка правильности задания пола'''
-        if sex not in (Gender.MALE, Gender.FEMALE):
+        if sex not in (Gender.MALE, Gender.FEMALE, None):
             raise Exception('Неверно задан пол!')
 
     def phrase(self, phrase, phrase_case=Case.NOMINATIVE):
         '''Склонение фразы
         применяется так же для склонения должности appointment_padeg
         '''
-        if phrase_case == Case.NOMINATIVE:
+        if phrase_case == Case.NOMINATIVE or phrase_case == None:
             return phrase
         else:
             return self.get_appointment(phrase, phrase_case)
@@ -106,7 +107,12 @@ class Morphy:
     
     def fio(self, last_name, first_name, middle_name, sex, phrase_case=Case.NOMINATIVE, regime_length=DFLT_LENGTH):
         '''Склонение ФИО, ф и о по отдельности'''
+        # Если пусто ставлю значения по умолчанию, веб всегда передает все аргументы
+        phrase_case = Case.NOMINATIVE if phrase_case is None else phrase_case
+        regime_length = DFLT_LENGTH if regime_length is None else regime_length
         Morphy.check_sex(sex)
+        if sex == None:
+            sex = int()
         Morphy.check_phrase_case(phrase_case)
         return self.prefix_fio(sex, phrase_case, regime_length) + \
             str(self.get_fio(last_name if regime_length != RegimeLength.RESPECTED_SHORT else '', 
@@ -116,6 +122,9 @@ class Morphy:
     
     def fio_full(self, full_name, sex, phrase_case=Case.NOMINATIVE, regime_length=DFLT_LENGTH):
         '''Склонение ФИО, ф и о одной строкой'''
+        # Если пусто ставлю значения по умолчанию, веб всегда передает все аргументы
+        phrase_case = Case.NOMINATIVE if phrase_case is None else phrase_case
+        regime_length = DFLT_LENGTH if regime_length is None else regime_length
         Morphy.check_sex(sex)
         Morphy.check_phrase_case(phrase_case)
         
@@ -161,24 +170,6 @@ class Morphy:
             if post_name.strip() == '' or dept_name.strip() == '':
                 return post_name.strip()
         return post_name
-       
-
-    # def fio_stub_full(self, full_name, sex, phrase_case=Case.NOMINATIVE, cut=False, reverse=False):
-    #     full_name_row = re.split(r'\W+', full_name)
-    #     if len(full_name_row) >= 3:
-    #         last_name, first_name, middle_name = full_name_row[:3]
-    #     elif len(full_name_row) == 2:
-    #         last_name, first_name = full_name_row
-    #         middle_name = ''
-    #     else:
-    #         raise Exception('Invalid full name: ' + full_name)
-    #     return self.fio_stub(last_name, first_name, middle_name, sex, phrase_case, cut, reverse)
-    
-    # def prefix_fio(self, sex, phrase_case, regime_length):
-    #     return ""
-
-
-    
 
     @staticmethod
     def reverse_cutted_fio(fullname, reverse):
@@ -260,6 +251,9 @@ class Morphy:
     
     def dept(self, dept_name, phrase_case=Case.NOMINATIVE, regime_init=RegimeInit.AS_IS):
         '''Склонение подразделения'''
+        # Если пусто ставлю значения по умолчанию, веб всегда передает все аргументы
+        phrase_case = Case.NOMINATIVE if phrase_case is None else phrase_case
+        regime_init = RegimeInit.AS_IS if regime_init is None else regime_init
         Morphy.check_phrase_case(phrase_case)
         if len(dept_name.strip()) == 0:
             return ''
@@ -304,6 +298,15 @@ class Morphy:
     def post(self, post_name, post_suffix='', dept_long_name='', dept_name='', phrase_case=Case.NOMINATIVE, 
              regime_post=DFLT_POST, regime_init_dept=DFLT_INIT_DEPT):    
         '''Склонение должности в подразделении'''
+        # Если пусто ставлю значения по умолчанию, веб всегда передает все аргументы
+        phrase_case = Case.NOMINATIVE if phrase_case is None else phrase_case
+        regime_post = DFLT_POST if regime_post is None else regime_post
+        regime_init_dept = DFLT_INIT_DEPT if regime_init_dept is None else regime_init_dept
+        post_name = '' if post_name is None else post_name
+        post_suffix = '' if post_suffix is None else post_suffix
+        dept_long_name = '' if dept_long_name is None else dept_long_name
+        dept_name = '' if dept_name is None else dept_name
+
         Morphy.check_regime_post(regime_post)
         Morphy.check_phrase_case(phrase_case)
 
@@ -380,6 +383,7 @@ class Morphy:
                 raise Exception('Неверно задан режим вывода даты!')
 
         if p_date == None:
+            p_date = datetime.datetime.now()
             return '"____"___________20___' + print_year()
         return print_day() + ' ' + print_month() + ' ' + print_year()
 
