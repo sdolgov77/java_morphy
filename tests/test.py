@@ -3,9 +3,9 @@ from jmorphy import Morphy, RegimeLength, Case, l_convert
 
 m = Morphy()
 counter = 0
-with open('result.csv', 'w') as csv_file:
+with open('tests/result.csv', 'w') as csv_file:
     writer = csv.writer(csv_file, delimiter=';')
-    with open('AGNLIST.csv', 'r', encoding='utf-8-sig') as f:
+    with open('tests/AGNLIST.csv', 'r', encoding='utf-8-sig') as f:
         reader = csv.DictReader(f, delimiter=';')
         for row in reader:
             # is_cut, is_reverse = l_convert[row['R_LENGTH']]

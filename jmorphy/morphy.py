@@ -4,6 +4,7 @@ import locale
 import re
 from .settings import *
 from jpype import startJVM, shutdownJVM,getDefaultJVMPath, JPackage, addClassPath
+import num2text
 
 # Текущая директория
 # CURRENT_PATH = os.path.abspath(os.path.dirname(__file__))
