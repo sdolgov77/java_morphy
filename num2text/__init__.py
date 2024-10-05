@@ -8,8 +8,8 @@ num2text(num, femail_units)
 units = (
     'ноль',
 
-    ('один', 'одна'),
-    ('два', 'две'),
+    ('одна', 'один', 'одно'),
+    ('две', 'два', 'два'),
 
     'три', 'четыре', 'пять',
     'шесть', 'семь', 'восемь', 'девять'
@@ -41,9 +41,9 @@ hundreds = (
 
 orders = (# plural forms and gender
     #(('', '', ''), 'm'), # (('рубль', 'рубля', 'рублей'), 'm'), # (('копейка', 'копейки', 'копеек'), 'f')
-    (('тысяча', 'тысячи', 'тысяч'), 'f'),
-    (('миллион', 'миллиона', 'миллионов'), 'm'),
-    (('миллиард', 'миллиарда', 'миллиардов'), 'm'),
+    (('тысяча', 'тысячи', 'тысяч'), 0),
+    (('миллион', 'миллиона', 'миллионов'), 1),
+    (('миллиард', 'миллиарда', 'миллиардов'), 1),
 )
 
 minus = 'минус'
@@ -70,7 +70,7 @@ def thousand(rest, sex):
         elif x == 10:
             name_ = names[cur]
             if isinstance(name_, tuple):
-                name_ = name_[0 if sex == 'm' else 1]
+                name_ = name_[sex]
             name.append(name_)
             if cur >= 2 and cur <= 4:
                 plural = 1
@@ -83,7 +83,7 @@ def thousand(rest, sex):
     return plural, name
 
 
-def num2text(num, main_units=(('', '', ''), 'm')):
+def num2text(num, main_units=(('', '', ''), 1)):
     _orders = (main_units,) + orders
     if num == 0:
         return ' '.join((units[0], _orders[0][0][2])).strip() # ноль

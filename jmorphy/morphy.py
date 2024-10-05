@@ -402,11 +402,11 @@ class Morphy:
         if int(p_cnt) != p_cnt:
             raise Exception('Вывод дробного количества в текстовом режиме не реализован!')
         if sex == Gender.MALE:
-            units = (('', '', ''), 'm')
+            units = (('', '', ''), 0)
         elif sex == Gender.FEMALE:
-            units = (('', '', ''), 'f')
+            units = (('', '', ''), 1)
         else:
-            raise Exception('Неверно задан пол единицы измерения!')
+            units = (('', '', ''), 2)
         return num2text(int(p_cnt), units)
 
 
