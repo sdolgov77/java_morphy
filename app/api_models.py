@@ -48,3 +48,6 @@ phrase_parser = reqparse.RequestParser()
 phrase_parser.add_argument('phrase', type=str, required=True, help="Example - ['Просто какая-то фраза']", location="args")
 phrase_parser.add_argument('phrase_case', type=int, choices=case_choices, required=False, help="Example - [1]", location="args") 
 
+count_parser = reqparse.RequestParser()
+count_parser.add_argument('p_cnt', type=int, required=True, help="Example - [123]", location="args")
+count_parser.add_argument('sex', type=int, choices=[0, 1, 2], required=True, help="Example - [0, 1]", location="args")

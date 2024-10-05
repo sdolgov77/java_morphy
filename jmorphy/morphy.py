@@ -4,7 +4,7 @@ import locale
 import re
 from .settings import *
 from jpype import startJVM, shutdownJVM,getDefaultJVMPath, JPackage, addClassPath
-import num2text
+from num2text import num2text
 
 # Текущая директория
 # CURRENT_PATH = os.path.abspath(os.path.dirname(__file__))
@@ -392,5 +392,23 @@ class Morphy:
             p_date = datetime.datetime.now()
             return '"____"___________20___' + print_year()
         return print_day() + ' ' + print_month() + ' ' + print_year()
+
+    def print_count(self, p_cnt, sex):
+        '''Печать количества прописью'''
+        if sex == None:
+            raise Exception('Не задан пол единицы измерения!')
+        if sex not in Gender:
+            raise Exception('Неверно задан пол единицы измерения!')
+        if int(p_cnt) != p_cnt:
+            raise Exception('Вывод дробного количества в текстовом режиме не реализован!')
+        if sex == Gender.MALE:
+            units = (('', '', ''), 'm')
+        elif sex == Gender.FEMALE:
+            units = (('', '', ''), 'f')
+        else:
+            raise Exception('Неверно задан пол единицы измерения!')
+        return num2text(int(p_cnt), units)
+
+
 
 
