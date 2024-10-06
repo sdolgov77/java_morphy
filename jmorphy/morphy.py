@@ -397,7 +397,7 @@ class Morphy:
         '''Печать количества прописью'''
         if sex == None:
             raise Exception('Не задан пол единицы измерения!')
-        if sex not in Gender:
+        if sex not in [0, 1, 2]: #Gender:
             raise Exception('Неверно задан пол единицы измерения!')
         if int(p_cnt) != p_cnt:
             raise Exception('Вывод дробного количества в текстовом режиме не реализован!')
