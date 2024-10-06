@@ -408,7 +408,69 @@ class Morphy:
         else:
             units = (('', '', ''), 2)
         return num2text(int(p_cnt), units)
+    
+    def print_count_pattern(self, p_cnt, pttrn_one, pttrn_two, pttrn_five, pttrn_null=None, 
+                            pttrn_only_zero=None, pttrn_only_one=None, sex=None, regime_init=None):
+        '''Печать количества прописью с шаблоном
+        p_cnt: количество
 
+        pttrn_* - шаблоны
+        pttrn_one: Шаблон количества, заканчивающегося на 1, исключая 11 (пр. '%s файл' - именительный падеж, ед.ч.)
+        pttrn_two: Шаблон количества, заканчивающегося на 2..4, исключая 12..14 (пр. '%s файла' - родительный падеж, ед.ч)
+        pttrn_five: Шаблон количества, заканчивающегося на 0, 5..9, 11..14, (пр. '%s файлов' - родительный падеж, мн.ч.)
+        pttrn_null: Шаблон неопределенного количества (пр. 'ошибка получения') - если содержит %s в этом месте будет 0
+        pttrn_only_zero: Шаблон для нулевого количества (пр. '%s файлов' - именительный падеж, ед.ч.) - если не заполнить, будет выведена пустая строка
+        pttrn_only_one: Шаблон единичного количества (пр. '%s файл' - именительный падеж, ед.ч.) - если не заполнить, будет pttrn_one
+        
+        sex: пол единицы измерения
+        regime_init: режим вывода первой буквы
+        '''
+        if pttrn_one is None or PTTRN_COUNT not in pttrn_one \
+            or pttrn_two is None or PTTRN_COUNT not in pttrn_two \
+            or pttrn_five is None or PTTRN_COUNT not in pttrn_five:
+            raise Exception(f'В шаблоне не указан паттерн количества "{PTTRN_COUNT}"!')
+        if p_cnt is None:
+            if sex is None:
+                l_cnt = '0'
+            else:
+                l_cnt = self.print_count(0, sex)
+            retval = pttrn_null.replace(PTTRN_COUNT, l_cnt)
+        else:
+            if sex is None:
+                l_cnt = str(p_cnt)
+            else:
+                l_cnt = self.print_count(p_cnt, sex)
+            
+            if p_cnt == 0:
+                retval = pttrn_only_zero.replace(PTTRN_COUNT, l_cnt)
+            else:
+                if p_cnt == 1:
+                    if pttrn_only_one is None:
+                        retval = pttrn_one.replace(PTTRN_COUNT, l_cnt)
+                    else:
+                        retval = pttrn_only_one.replace(PTTRN_COUNT, l_cnt)
+                elif int(p_cnt) == p_cnt:
+                    str_p_cnt = str(int(p_cnt))
+                    l_decade = str_p_cnt[-2]
+                    l_unit = str_p_cnt[-1]
+                    if l_decade == '1' or l_unit in ('0', '5', '6', '7', '8', '9'):
+                        retval = pttrn_five.replace(PTTRN_COUNT, l_cnt)
+                    elif l_unit == '1':
+                        retval = pttrn_one.replace(PTTRN_COUNT, l_cnt)
+                    else:
+                        retval = pttrn_two.replace(PTTRN_COUNT, l_cnt)
+                else:
+                    if sex is None:
+                        return pttrn_two.replace(PTTRN_COUNT, str(p_cnt))
+                    else:
+                        return pttrn_two.replace(PTTRN_COUNT, l_cnt)
 
-
+        if regime_init is None or regime_init == RegimeInit.AS_IS:
+            return retval
+        elif regime_init == RegimeInit.LOWER:
+            return self.init_lower(retval)
+        elif regime_init == RegimeInit.UPPER:
+            return self.init_upper(retval)
+        else:
+            raise Exception('Неверно задан режим вывода первой буквы числа!')
 
