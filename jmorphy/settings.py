@@ -120,3 +120,54 @@ EXCL_DEPT = [
    ' группы',
    ' бригады',
 ]
+
+CURRENCY = {
+   'RUR': {
+      'name': 'Российский рубль',
+      'base_nominative': 'рубль',
+      'base_genitive': 'рублей',
+      'base_genitive_plural': 'рублей',
+      'penny_short': 'коп.',
+      'base_sex': 1
+   },
+   'USD': {
+      'name': 'Доллар США',
+      'base_nominative': 'доллар',
+      'base_genitive': 'доллара',
+      'base_genitive_plural': 'долларов',
+      'penny_short': 'цент.',
+      'base_sex': 1
+   },
+   'EUR': {
+      'name': 'Евро',
+      'base_nominative': 'евро',
+      'base_genitive': 'евро',
+      'base_genitive_plural': 'евро',
+      'penny_short': 'евроцент.',
+      'base_sex': 1
+   },
+   'BYN': {
+      'name': 'Белорусский рубль',
+      'base_nominative': 'белорусских руб.',
+      'base_genitive': 'белорусских рубля',
+      'base_genitive_plural': 'белорусских рублей',
+      'penny_short': 'коп.',
+      'base_sex': 1
+   },
+   'KZT': {
+      'name': 'Казахский тенге',
+      'base_nominative': 'тенге',
+      'base_genitive': 'тенге',
+      'base_genitive_plural': 'тенге',
+      'penny_short': 'тиын.',
+      'base_sex': 1
+   },
+   'CNY': {
+      'name': 'Китайский юань',
+      'base_nominative': 'юань',
+      'base_genitive': 'юаня',
+      'base_genitive_plural': 'юаней',
+      'penny_short': 'фен.',
+      'base_sex': 1
+   },
+}

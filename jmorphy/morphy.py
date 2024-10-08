@@ -476,3 +476,23 @@ class Morphy:
         else:
             raise Exception('Неверно задан режим вывода первой буквы числа!')
 
+    def print_sum(self, p_sum, currency_code=DFLT_CURR_CODE, regime_init=RegimeInit.AS_IS):
+        '''Печать денежной суммы с названием валюты'''
+        if currency_code is None or currency_code not in CURRENCY:
+            raise Exception('Неверно задан код валюты!')
+        retval = self.print_count_pattern(
+            int(p_sum), 
+            PTTRN_COUNT + ' ' + CURRENCY[currency_code].base_nominative, 
+            PTTRN_COUNT + ' ' + CURRENCY[currency_code].base_genitive,
+            PTTRN_COUNT + ' ' + CURRENCY[currency_code].base_genitive_plural,
+            '__________________________________________________________________________________________________________ ______',
+            CURRENCY[currency_code].base_sex,
+            regime_init
+        )
+
+        penny = (' ___' if p_sum is None else str(int((p_sum - int(p_sum)) * 100)).zfill(2)) + ' ' + CURRENCY[currency_code].penny_short
+
+        if not retval:
+            return penny.strip()
+
+        return retval + penny
