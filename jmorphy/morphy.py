@@ -139,6 +139,8 @@ class Morphy:
         
         if regime_length == RegimeLength.RESPECTED_SHORT:
             full_name_row = re.split(r'\W+', full_name)
+            if len(full_name_row) < 3:
+                full_name_row.append('') # если нет отчества, добавить пустую строку
             if phrase_case == Case.NOMINATIVE:
                 return self.prefix_fio(sex, phrase_case, regime_length) + \
                     full_name_row[1] + ' ' + full_name_row[2]

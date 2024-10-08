@@ -60,5 +60,4 @@ class PrintCountApi(Resource):
     @api.doc(parser=count_parser)
     def get(self):
         args = count_parser.parse_args()
-        print(args)
         return morphy.print_count(**args)      
