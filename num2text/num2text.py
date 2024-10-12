@@ -39,8 +39,8 @@ hundreds = (
     'девятьсот'
 )
 
-orders = (# plural forms and gender
-    #(('', '', ''), 'm'), # (('рубль', 'рубля', 'рублей'), 'm'), # (('копейка', 'копейки', 'копеек'), 'f')
+orders = (  # plural forms and gender
+    # (('', '', ''), 'm'), # (('рубль', 'рубля', 'рублей'), 'm'), # (('копейка', 'копейки', 'копеек'), 'f')
     (('тысяча', 'тысячи', 'тысяч'), 0),
     (('миллион', 'миллиона', 'миллионов'), 1),
     (('миллиард', 'миллиарда', 'миллиардов'), 1),
@@ -86,7 +86,7 @@ def thousand(rest, sex):
 def num2text(num, main_units=(('', '', ''), 1)):
     _orders = (main_units,) + orders
     if num == 0:
-        return ' '.join((units[0], _orders[0][0][2])).strip() # ноль
+        return ' '.join((units[0], _orders[0][0][2])).strip()  # ноль
 
     rest = abs(num)
     ord = 0

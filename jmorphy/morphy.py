@@ -3,7 +3,7 @@ import locale
 # import os
 import re
 from .settings import *
-from jpype import startJVM, shutdownJVM,getDefaultJVMPath, JPackage, addClassPath
+from jpype import startJVM, shutdownJVM, getDefaultJVMPath, JPackage, addClassPath
 from num2text import num2text
 
 # Текущая директория
@@ -16,6 +16,7 @@ regime_init_choices = [v.value for v in RegimeInit]
 post_format_choices = [v.value for v in PostFormat]
 year_add_choices = [v.value for v in YearAdd]
 day_format_choices = [v.value for v in DayFormat]
+
 
 class Morphy:
     def __init__(self):
@@ -32,43 +33,45 @@ class Morphy:
         '''Проверка правильности задания падежа'''
         if phrase_case == None:
             raise Exception('Не задан падеж!')
-        if phrase_case not in case_choices: #Case:
+        if phrase_case not in case_choices:  # Case:
             raise Exception('Неверно задан падеж!')
 
     @staticmethod
-    def check_regime_init (regime):
+    def check_regime_init(regime):
         '''Корректность режима вывода первой буквы'''
         if regime == None:
             raise Exception('Не задан режим вывода первой буквы!')
-        if regime not in regime_init_choices: #RegimeInit:
+        if regime not in regime_init_choices:  # RegimeInit:
             raise Exception('Неверно задан режим вывода первой буквы!')
 
     @staticmethod
-    def check_regime_init_dept (regime):
+    def check_regime_init_dept(regime):
         '''Корректность режима вывода первой буквы подразделения'''
         if regime == None:
-            raise Exception('Не задан режим вывода первой буквы подразделения!')
+            raise Exception(
+                'Не задан режим вывода первой буквы подразделения!')
         if regime not in (RegimeInit.AS_IS, RegimeInit.LOWER):
-            raise Exception('Неверно задан режим вывода первой буквы подразделения!')
+            raise Exception(
+                'Неверно задан режим вывода первой буквы подразделения!')
 
     @staticmethod
-    def check_regime_length (regime):
+    def check_regime_length(regime):
         '''Корректность режима длины имени'''
         if regime == None:
             raise Exception('Не задан режим вывода имени!')
-        if regime not in regime_length_choices: #RegimeLength:
+        if regime not in regime_length_choices:  # RegimeLength:
             raise Exception('Неверно задан режим вывода имени!')
 
     @staticmethod
-    def check_regime_post (regime):
+    def check_regime_post(regime):
         '''Корректность режима вывода должности'''
         if regime == None:
             raise Exception('Не задан режим вывода должности!')
-        if regime not in post_format_choices: #PostFormat:
+        if regime not in post_format_choices:  # PostFormat:
             raise Exception('Неверно задан режим вывода должности!')
 
     @staticmethod
-    def check_regime_respected (regime):
+    def check_regime_respected(regime):
         '''Корректность режима вывода вежливого обращения'''
         if regime == None:
             raise Exception('Не задан режим вывода вежливого обращения!')
@@ -76,19 +79,19 @@ class Morphy:
             raise Exception('Неверно задан режим вывода вежливого обращения!')
 
     @staticmethod
-    def get_cut (regime_length):
+    def get_cut(regime_length):
         '''Возвращает признак обрезания имени'''
         Morphy.check_regime_length(regime_length)
         return length_convert[regime_length][0]
 
     @staticmethod
-    def get_reverse (regime_length):
+    def get_reverse(regime_length):
         '''Возвращает признак обрезания имени'''
         Morphy.check_regime_length(regime_length)
         return length_convert[regime_length][1]
 
     @staticmethod
-    def check_sex (sex):
+    def check_sex(sex):
         '''Проверка правильности задания пола'''
         if sex not in (Gender.MALE, Gender.FEMALE, None):
             raise Exception('Неверно задан пол!')
@@ -110,7 +113,7 @@ class Morphy:
             elif sex == Gender.MALE:
                 return self.phrase(Respected.MALE, phrase_case) + ' '
         return ''
-    
+
     def fio(self, last_name, first_name, middle_name, sex, phrase_case=Case.NOMINATIVE, regime_length=DFLT_LENGTH):
         '''Склонение ФИО, ф и о по отдельности'''
         # Если пусто ставлю значения по умолчанию, веб всегда передает все аргументы
@@ -121,11 +124,11 @@ class Morphy:
             sex = int()
         Morphy.check_phrase_case(phrase_case)
         return self.prefix_fio(sex, phrase_case, regime_length) + \
-            str(self.get_fio(last_name if regime_length != RegimeLength.RESPECTED_SHORT else '', 
-                         first_name, middle_name, sex, phrase_case, 
-                         self.get_cut(regime_length), 
-                         self.get_reverse(regime_length))).lstrip()
-    
+            str(self.get_fio(last_name if regime_length != RegimeLength.RESPECTED_SHORT else '',
+                             first_name, middle_name, sex, phrase_case,
+                             self.get_cut(regime_length),
+                             self.get_reverse(regime_length))).lstrip()
+
     def fio_full(self, full_name, sex, phrase_case=Case.NOMINATIVE, regime_length=DFLT_LENGTH):
         '''Склонение ФИО, ф и о одной строкой'''
         # Если пусто ставлю значения по умолчанию, веб всегда передает все аргументы
@@ -133,28 +136,29 @@ class Morphy:
         regime_length = DFLT_LENGTH if regime_length is None else regime_length
         Morphy.check_sex(sex)
         Morphy.check_phrase_case(phrase_case)
-        
+
         if not regime_length.strip():
             regime_length = RegimeLength.SHORT
-        
+
         if regime_length == RegimeLength.RESPECTED_SHORT:
             full_name_row = re.split(r'\W+', full_name)
             if len(full_name_row) < 3:
-                full_name_row.append('') # если нет отчества, добавить пустую строку
+                # если нет отчества, добавить пустую строку
+                full_name_row.append('')
             if phrase_case == Case.NOMINATIVE:
                 return self.prefix_fio(sex, phrase_case, regime_length) + \
                     full_name_row[1] + ' ' + full_name_row[2]
             else:
                 return self.fio(full_name_row[0], full_name_row[1], full_name_row[2], sex, phrase_case, regime_length)
         elif phrase_case == Case.NOMINATIVE and regime_length in (RegimeLength.RESPECTED_LONG, RegimeLength.LONG) \
-            or full_name.strip() is None:
+                or full_name.strip() is None:
             return self.prefix_fio(sex, phrase_case, regime_length) + full_name
         else:
             return self.prefix_fio(sex, phrase_case, regime_length) + \
-                self.get_fio_p(full_name, sex, phrase_case, 
-                            self.get_cut(regime_length), 
-                            self.get_reverse(regime_length))
-        
+                self.get_fio_p(full_name, sex, phrase_case,
+                               self.get_cut(regime_length),
+                               self.get_reverse(regime_length))
+
     def cutted_post(self, post_name):
         '''Может ли наименование должности сокращено'''
         post_name = post_name.strip()
@@ -194,7 +198,7 @@ class Morphy:
                 return ""
         else:
             return fullname
-        
+
     def get_fio_p(self, fio, sex, padeg, cut, reverse):
         if cut:
             if sex is None:
@@ -203,7 +207,8 @@ class Morphy:
                 return Morphy.reverse_cutted_fio(str(self.p.getCutFIOPadegFS(fio, sex, padeg)), reverse)
         else:
             if reverse:
-                raise ValueError("Вывод полного ФИО в реверсном режиме (когда Фамилия выводится в конце) не реализован!")
+                raise ValueError(
+                    "Вывод полного ФИО в реверсном режиме (когда Фамилия выводится в конце) не реализован!")
             else:
                 if sex is None:
                     return str(self.p.getFIOPadegFSAS(fio, padeg))
@@ -216,14 +221,15 @@ class Morphy:
             return Morphy.reverse_cutted_fio(str(self.p.getCutFIOPadeg(last_name, first_name, middle_name, sex, padeg)), reverse)
         else:
             if reverse:
-                raise ValueError("Вывод полного ФИО в реверсном режиме (когда Фамилия выводится в конце) не реализован!")
+                raise ValueError(
+                    "Вывод полного ФИО в реверсном режиме (когда Фамилия выводится в конце) не реализован!")
             else:
                 return str(self.p.getFIOPadeg(last_name, first_name, middle_name, sex, padeg))
 
     def init_lower(self, word):
         '''Приведение первой буквы к нижнему регистру'''
         return word[0].lower() + word[1:]
-    
+
     def init_upper(self, word):
         '''Приведение первой буквы к верхнему регистру'''
         return word[0].upper() + word[1:]
@@ -232,31 +238,32 @@ class Morphy:
         if regime_init == RegimeInit.AS_IS:
             return dept_name
         elif len(dept_name) < 2 \
-           or 'цех электросвязи' in dept_name \
-           or 'ЦЭС' in dept_name \
-           or 'узел связи' in dept_name \
-           or 'УС' in dept_name \
-           or dept_name.upper().startswith('СВЯЗЬТРАНСНЕФТЬ') \
-           or dept_name.upper().startswith('АО') \
-           or dept_name.startswith('УС') \
-           or dept_name.upper()[:2] == dept_name[:2] \
-           or dept_name[0].upper() == dept_name[0] and dept_name[2].upper() == dept_name[2] \
-           or (
+            or 'цех электросвязи' in dept_name \
+            or 'ЦЭС' in dept_name \
+            or 'узел связи' in dept_name \
+            or 'УС' in dept_name \
+            or dept_name.upper().startswith('СВЯЗЬТРАНСНЕФТЬ') \
+            or dept_name.upper().startswith('АО') \
+            or dept_name.startswith('УС') \
+            or dept_name.upper()[:2] == dept_name[:2] \
+            or dept_name[0].upper() == dept_name[0] and dept_name[2].upper() == dept_name[2] \
+            or (
             ' ПТУС' in dept_name
             or 'ПТУС ' in dept_name
-           ) and dept_name.upper()[:6] != 'ФИЛИАЛ':
-           return dept_name
+        ) and dept_name.upper()[:6] != 'ФИЛИАЛ':
+            return dept_name
         elif regime_init == RegimeInit.LOWER:
             return self.init_lower(dept_name)
         else:
-            raise Exception('Неверно задан режим вывода первой буквы подразделения!')
+            raise Exception(
+                'Неверно задан режим вывода первой буквы подразделения!')
 
     def dept_init_lower(self, dept_name):
         return self.dept_init(dept_name, RegimeInit.LOWER)
 
     def correct_dept_name(self, dept_name):
         return dept_name.replace('"-"', '" - "')
-    
+
     def dept(self, dept_name, phrase_case=Case.NOMINATIVE, regime_init=RegimeInit.AS_IS):
         '''Склонение подразделения'''
         # Если пусто ставлю значения по умолчанию, веб всегда передает все аргументы
@@ -271,10 +278,10 @@ class Morphy:
             return self.dept_init(self.correct_dept_name(dept_name), regime_init)
         return self.correct_dept_name(
             self.get_office(
-                self.dept_init(dept_name, regime_init), 
+                self.dept_init(dept_name, regime_init),
                 phrase_case)
-            )
-    
+        )
+
     def get_appointment(self, post, padeg):
         '''Склонение должности'''
         m_post = post.replace("о-", "о&")
@@ -285,7 +292,7 @@ class Morphy:
                 return str(self.p.getAppointmentPadeg(post, padeg))
         sub_str = m_post.split(delimiter)
         return delimiter.join([str(self.p.getAppointmentPadeg(sub.replace("о&", "о-"), padeg)) for sub in sub_str])
-    
+
     def get_office(self, dept, padeg):
         return str(self.p.getOfficePadeg(dept, padeg))
 
@@ -296,15 +303,15 @@ class Morphy:
             return word
         return word.upper()
 
-    @staticmethod    
+    @staticmethod
     def upper(text):
         '''Приведение предложения к верхнему регистру, исключая аббревиатуры и разряды'''
         if text.isspace() or len(text) == 0:
             return text
         return ' '.join([Morphy.upper_word(word) for word in text.split()])
-    
-    def post(self, post_name, post_suffix='', dept_long_name='', dept_name='', phrase_case=Case.NOMINATIVE, 
-             regime_post=DFLT_POST, regime_init_dept=DFLT_INIT_DEPT):    
+
+    def post(self, post_name, post_suffix='', dept_long_name='', dept_name='', phrase_case=Case.NOMINATIVE,
+             regime_post=DFLT_POST, regime_init_dept=DFLT_INIT_DEPT):
         '''Склонение должности в подразделении'''
         # Если пусто ставлю значения по умолчанию, веб всегда передает все аргументы
         phrase_case = Case.NOMINATIVE if phrase_case is None else phrase_case
@@ -324,37 +331,42 @@ class Morphy:
         l_dept = dept_name.strip()
 
         l_no_dept = l_post.lower() == l_dept_long.lower() \
-                    or l_dept_long != '' and (
-                        (' ' + l_dept_long.lower()) in l_post.lower() \
-                        or (l_dept_long.lower() + ' ') in l_post.lower()) \
-                    or 'доверенности' in l_post.lower() \
-                    or ('АО' + chr(160) + 'Связьтранснефть') in l_post
-         
+            or l_dept_long != '' and (
+            (' ' + l_dept_long.lower()) in l_post.lower()
+            or (l_dept_long.lower() + ' ') in l_post.lower()) \
+            or 'доверенности' in l_post.lower() \
+            or ('АО' + chr(160) + 'Связьтранснефть') in l_post
+
         if l_post == '' or regime_post == PostFormat.AS_IS and phrase_case == Case.NOMINATIVE:
             return post_name
-        
+
         if regime_post in (PostFormat.POSSIBLE, PostFormat.SHORT, PostFormat.DEPT, PostFormat.LONG):
             if self.cutted_post(post_name) and not l_no_dept:
                 if l_dept_long == '' and regime_post != PostFormat.POSSIBLE:
-                    raise Exception('Для сокращения наименования должности не хватает полного наименования подразделения!')
+                    raise Exception(
+                        'Для сокращения наименования должности не хватает полного наименования подразделения!')
                 elif l_dept_long != '':
                     post_name = self.cut_post(l_post, l_dept_long)
-        
+
         if dept_name != '':
             if (' ' + dept_name) in l_post:
                 l_post = post_name.replace(' ' + dept_name, '')
-        
+
         if regime_post in (PostFormat.POSSIBLE, PostFormat.DEPT):
             if l_dept == '' and regime_post == PostFormat.DEPT:
-                raise Exception('Для выбранного режима отображения должности не хватает краткого наименования подразделения!')
-        l_dept = self.dept(dept_name if dept_name != '' else self.dept_init(l_dept_long, regime_init_dept), Case.GENITIVE)    
+                raise Exception(
+                    'Для выбранного режима отображения должности не хватает краткого наименования подразделения!')
+        l_dept = self.dept(dept_name if dept_name != '' else self.dept_init(
+            l_dept_long, regime_init_dept), Case.GENITIVE)
 
         if regime_post in (PostFormat.POSSIBLE, PostFormat.LONG) and l_dept == '':
             if l_dept_long == '':
                 if regime_post == PostFormat.LONG:
-                    raise Exception('Для выбранного режима отображения должности не хватает полного наименования подразделения!')
+                    raise Exception(
+                        'Для выбранного режима отображения должности не хватает полного наименования подразделения!')
             else:
-                l_dept = self.dept(self.dept_init(l_dept_long, regime_init_dept), Case.GENITIVE)
+                l_dept = self.dept(self.dept_init(
+                    l_dept_long, regime_init_dept), Case.GENITIVE)
 
         if phrase_case != Case.NOMINATIVE:
             l_post = self.get_appointment(l_post, phrase_case)
@@ -376,10 +388,10 @@ class Morphy:
                 return p_date.strftime('%d')
             else:
                 raise Exception('Неверно задан режим вывода дня месяца!')
-            
+
         def print_month():
             return p_date.strftime('%B')
-        
+
         def print_year():
             if regime == None:
                 raise Exception('Не задан режим вывода даты!')
@@ -399,10 +411,11 @@ class Morphy:
         '''Печать количества прописью'''
         if sex == None:
             raise Exception('Не задан пол единицы измерения!')
-        if sex not in [0, 1, 2]: #Gender:
+        if sex not in [0, 1, 2]:  # Gender:
             raise Exception('Неверно задан пол единицы измерения!')
         if int(p_cnt) != p_cnt:
-            raise Exception('Вывод дробного количества в текстовом режиме не реализован!')
+            raise Exception(
+                'Вывод дробного количества в текстовом режиме не реализован!')
         if sex == Gender.MALE:
             units = (('', '', ''), 0)
         elif sex == Gender.FEMALE:
@@ -410,8 +423,8 @@ class Morphy:
         else:
             units = (('', '', ''), 2)
         return num2text(int(p_cnt), units)
-    
-    def print_count_pattern(self, p_cnt, pttrn_one, pttrn_two, pttrn_five, pttrn_null=None, 
+
+    def print_count_pattern(self, p_cnt, pttrn_one, pttrn_two, pttrn_five, pttrn_null=None,
                             pttrn_only_zero=None, pttrn_only_one=None, sex=None, regime_init=None):
         '''Печать количества прописью с шаблоном
         p_cnt: количество
@@ -423,14 +436,15 @@ class Morphy:
         pttrn_null: Шаблон неопределенного количества (пр. 'ошибка получения') - если содержит %s в этом месте будет 0
         pttrn_only_zero: Шаблон для нулевого количества (пр. '%s файлов' - именительный падеж, ед.ч.) - если не заполнить, будет выведена пустая строка
         pttrn_only_one: Шаблон единичного количества (пр. '%s файл' - именительный падеж, ед.ч.) - если не заполнить, будет pttrn_one
-        
+
         sex: пол единицы измерения
         regime_init: режим вывода первой буквы
         '''
         if pttrn_one is None or PTTRN_COUNT not in pttrn_one \
-            or pttrn_two is None or PTTRN_COUNT not in pttrn_two \
-            or pttrn_five is None or PTTRN_COUNT not in pttrn_five:
-            raise Exception(f'В шаблоне не указан паттерн количества "{PTTRN_COUNT}"!')
+                or pttrn_two is None or PTTRN_COUNT not in pttrn_two \
+                or pttrn_five is None or PTTRN_COUNT not in pttrn_five:
+            raise Exception(
+                f'В шаблоне не указан паттерн количества "{PTTRN_COUNT}"!')
         if p_cnt is None:
             if sex is None:
                 l_cnt = '0'
@@ -442,7 +456,7 @@ class Morphy:
                 l_cnt = str(p_cnt)
             else:
                 l_cnt = self.print_count(p_cnt, sex)
-            
+
             if p_cnt == 0:
                 retval = pttrn_only_zero.replace(PTTRN_COUNT, l_cnt)
             else:
@@ -481,8 +495,8 @@ class Morphy:
         if currency_code is None or currency_code not in CURRENCY:
             raise Exception('Неверно задан код валюты!')
         retval = self.print_count_pattern(
-            int(p_sum), 
-            PTTRN_COUNT + ' ' + CURRENCY[currency_code].base_nominative, 
+            int(p_sum),
+            PTTRN_COUNT + ' ' + CURRENCY[currency_code].base_nominative,
             PTTRN_COUNT + ' ' + CURRENCY[currency_code].base_genitive,
             PTTRN_COUNT + ' ' + CURRENCY[currency_code].base_genitive_plural,
             '__________________________________________________________________________________________________________ ______',
@@ -490,7 +504,8 @@ class Morphy:
             regime_init
         )
 
-        penny = (' ___' if p_sum is None else str(int((p_sum - int(p_sum)) * 100)).zfill(2)) + ' ' + CURRENCY[currency_code].penny_short
+        penny = (' ___' if p_sum is None else str(int((p_sum - int(p_sum))
+                 * 100)).zfill(2)) + ' ' + CURRENCY[currency_code].penny_short
 
         if not retval:
             return penny.strip()

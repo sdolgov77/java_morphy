@@ -13,5 +13,5 @@ api.add_namespace(ns)
 
 #     api.init_app(app)
 #     api.add_namespace(ns)
-    
+
 #     return app
