@@ -135,3 +135,34 @@ cut_post_parser.add_argument('post_name', type=str, required=True,
                              help="Example - [Ведущий специалист]", location="args")
 cut_post_parser.add_argument('dept_long_name', type=str, required=False,
                              help="Example - [Служба экологической безопасности]", location="args")
+
+padeg_fs_parser = reqparse.RequestParser()
+padeg_fs_parser.add_argument("fio", type=str, required=True,
+                             help="Example - [Иванов Иван Иванович]", location="args")
+padeg_fs_parser.add_argument("sex", type=bool, required=False,
+                             help="Example - [True, False]", location="args")
+padeg_fs_parser.add_argument("padeg", type=int, choices=case_choices,
+                             required=False, help="Example - [1]", location="args")
+
+padeg_fsas_parser = padeg_fs_parser.copy()
+padeg_fsas_parser.remove_argument("sex")
+
+padeg_appointment_parser = reqparse.RequestParser()
+padeg_appointment_parser.add_argument("post", type=str, required=True,
+                                      help="Example - [Ведущий специалист]", location="args")
+padeg_appointment_parser.add_argument("padeg", type=int, choices=case_choices,
+                                      required=False, help="Example - [1]", location="args")
+
+padeg_office_parser = reqparse.RequestParser()
+padeg_office_parser.add_argument("dept", type=str, required=True,
+                                 help="Example - [Служба экологической безопасности]", location="args")
+padeg_office_parser.add_argument("padeg", type=int, choices=case_choices,
+                                 required=False, help="Example - [1]", location="args")
+
+padeg_full_appointment_parser = reqparse.RequestParser()
+padeg_full_appointment_parser.add_argument("appointment", type=str, required=True,
+                                           help="Example - [Ведущий специалист]", location="args")
+padeg_full_appointment_parser.add_argument("office", type=str, required=True,
+                                           help="Example - [Служба экологической безопасности]", location="args")
+padeg_full_appointment_parser.add_argument("padeg", type=int, choices=case_choices,
+                                           required=False, help="Example - [1]", location="args")

@@ -2,7 +2,8 @@ from flask_restx import Resource, Namespace
 
 from .api_models import fio_parser, full_fio_parser, dept_parser, post_parser, \
     date_parser, phrase_parser, count_parser, dept_init_parser, dept_init_lower_parser, init_parser, \
-    count_pattern_parser, sum_parser, upper_parser, case_check_parser, regime_check_parser, cut_post_parser
+    count_pattern_parser, sum_parser, upper_parser, case_check_parser, regime_check_parser, cut_post_parser, \
+    padeg_fs_parser, padeg_fsas_parser, padeg_appointment_parser, padeg_office_parser, padeg_full_appointment_parser
 from .extensions import api, morphy, del_none
 
 
@@ -162,3 +163,43 @@ class CutPostApi(Resource):
     def get(self):
         args = cut_post_parser.parse_args()
         return morphy.cut_post(**args)
+
+
+@ns.route('/get_fio_padeg_fs')
+class PadegFSApi(Resource):
+    @api.doc(parser=padeg_fs_parser)
+    def get(self):
+        args = padeg_fs_parser.parse_args()
+        return morphy.get_fio_padeg_fs(**args)
+
+
+@ns.route('/get_fio_padeg_fsas')
+class PadegFSASApi(Resource):
+    @api.doc(parser=padeg_fsas_parser)
+    def get(self):
+        args = padeg_fsas_parser.parse_args()
+        return morphy.get_fio_padeg_fsas(**args)
+
+
+@ns.route('/get_appointment_padeg')
+class PadegAppointmentApi(Resource):
+    @api.doc(parser=padeg_appointment_parser)
+    def get(self):
+        args = padeg_appointment_parser.parse_args()
+        return morphy.get_appointment_padeg(**args)
+
+
+@ns.route('/get_office_padeg')
+class PadegOfficeApi(Resource):
+    @api.doc(parser=padeg_office_parser)
+    def get(self):
+        args = padeg_office_parser.parse_args()
+        return morphy.get_office_padeg(**args)
+
+
+@ns.route('/get_full_appointment_padeg')
+class PadegFullAppointmentApi(Resource):
+    @api.doc(parser=padeg_full_appointment_parser)
+    def get(self):
+        args = padeg_full_appointment_parser.parse_args()
+        return morphy.get_full_appointment_padeg(**args)

@@ -511,3 +511,18 @@ class Morphy:
             return penny.strip()
 
         return retval + penny
+
+    def get_fio_padeg_fs(self, fio, sex, padeg):
+        return str(self.p.getFIOPadegFS(fio, sex, padeg))
+
+    def get_fio_padeg_fsas(self, fio, padeg):
+        return str(self.p.getFIOPadegFSAS(fio, padeg))
+
+    def get_appointment_padeg(self, post, padeg):
+        return str(self.p.getAppointmentPadeg(post, padeg))
+
+    def get_office_padeg(self, dept, padeg):
+        return str(self.p.getOfficePadeg(dept, padeg))
+
+    def get_full_appointment_padeg(self, appointment, office, padeg):
+        return str(self.p.getFullAppointmentPadeg(appointment, office, padeg))
