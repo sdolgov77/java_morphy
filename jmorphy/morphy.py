@@ -346,11 +346,11 @@ class Morphy:
                     raise Exception(
                         'Для сокращения наименования должности не хватает полного наименования подразделения!')
                 elif l_dept_long != '':
-                    post_name = self.cut_post(l_post, l_dept_long)
+                    l_post = self.cut_post(l_post, l_dept_long)
 
         if dept_name != '':
             if (' ' + dept_name) in l_post:
-                l_post = post_name.replace(' ' + dept_name, '')
+                l_post = l_post.replace(' ' + dept_name, '')
 
         if regime_post in (PostFormat.POSSIBLE, PostFormat.DEPT):
             if l_dept == '' and regime_post == PostFormat.DEPT:
