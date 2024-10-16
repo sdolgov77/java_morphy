@@ -106,7 +106,7 @@ class Count:
 
 PTTRN_COUNT = '%s'                # Паттерн замены количества
 
-EXCL_POST = [
+EXCL_DEPT = [
     'цех',
     'центр',
     'филиал',
@@ -120,7 +120,7 @@ EXCL_POST = [
     'бригада',
 ]
 
-EXCL_DEPT = [
+EXCL_POST = [
     ' цеха',
     ' центра',
     'филиала',
