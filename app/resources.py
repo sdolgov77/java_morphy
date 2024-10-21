@@ -1,5 +1,7 @@
 from flask_restx import Resource, Namespace
 from werkzeug.exceptions import BadRequest
+import logging_config
+import logging
 
 from .api_models import fio_parser, full_fio_parser, dept_parser, post_parser, \
     date_parser, phrase_parser, count_parser, dept_init_parser, dept_init_lower_parser, init_parser, \
@@ -7,6 +9,8 @@ from .api_models import fio_parser, full_fio_parser, dept_parser, post_parser, \
     padeg_fs_parser, padeg_fsas_parser, padeg_appointment_parser, padeg_office_parser, padeg_full_appointment_parser
 from .extensions import api, morphy, del_none
 
+
+logger = logging.getLogger(__name__)
 
 ns = Namespace('api', description='API')
 
@@ -172,6 +176,7 @@ class CheckPhraseCaseApi(Resource):
         try:
             return morphy.check_phrase_case(**args)
         except Exception as e:
+            logger.info(e)
             raise BadRequest(str(e))
 
 
