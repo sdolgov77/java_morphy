@@ -325,7 +325,7 @@ class Morphy:
         Morphy.check_regime_post(regime_post)
         Morphy.check_phrase_case(phrase_case)
 
-        l_post = post_name.strip()
+        l_post = post_name.strip().replace(chr(150), chr(45)).replace(chr(151), chr(45))
         l_suffix = post_suffix.strip()
         l_dept_long = dept_long_name.strip()
         l_dept = dept_name.strip()
