@@ -325,7 +325,7 @@ class Morphy:
         Morphy.check_regime_post(regime_post)
         Morphy.check_phrase_case(phrase_case)
 
-        l_post = post_name.strip().replace(chr(150), chr(45)).replace(chr(151), chr(45))
+        l_post = post_name.strip().replace('—', '-', 5).replace('–', '-', 5)
         l_suffix = post_suffix.strip()
         l_dept_long = dept_long_name.strip()
         l_dept = dept_name.strip()
@@ -370,12 +370,12 @@ class Morphy:
 
         if phrase_case != Case.NOMINATIVE:
             l_post = self.get_appointment(l_post, phrase_case)
-        l_post = ' '.join([l_post, l_suffix])
+        l_post = ' '.join([l_post, l_suffix]).strip()
 
         if l_no_dept:
             return l_post.replace('  ', ' ')
         else:
-            return (' '.join([l_post, l_dept])).replace('  ', ' ')
+            return (' '.join([l_post, l_dept])).replace('  ', ' ').strip()
 
     def print_date(self, p_date=None, regime=DFLT_DATE, regime_day=DFLT_DAY):
         '''Печать даты'''
